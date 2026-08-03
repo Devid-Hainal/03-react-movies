@@ -7,15 +7,21 @@ import type { Movie } from "../../types/movie";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import MovieModal from "../MovieModal/MovieModal";
 
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const handleSearch = (query: string) => {
     setQuery(query);
+  };
+
+  const closeModal = () => {
+    setSelectedMovie(null);
   };
 
   useEffect(() => {
@@ -45,7 +51,9 @@ export default function App() {
   return (
     <div className={css.app}>
       <SearchBar onSearch={handleSearch} />
-      {movies.length > 0 && <MovieGrid movies={movies} />}
+      {movies.length > 0 && (
+        <MovieGrid movies={movies} onSelect={setSelectedMovie} />
+      )}
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -53,6 +61,9 @@ export default function App() {
       />
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
+      {selectedMovie && (
+        <MovieModal movie={selectedMovie} onClose={closeModal} />
+      )}
     </div>
   );
 }
