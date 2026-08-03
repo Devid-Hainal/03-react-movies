@@ -50,7 +50,7 @@ export default function App() {
   }, [query]);
   return (
     <div className={css.app}>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSubmit={handleSearch} />
       {movies.length > 0 && (
         <MovieGrid movies={movies} onSelect={setSelectedMovie} />
       )}
